@@ -1,3 +1,28 @@
+
+/*
+4. Se solicita una solución programable para que la placa KL25Z funcione de la siguiente
+manera. Se deberá realizar un demultiplexor de 1 a 2 donde su entrada selectora se maneja
+mediante un pulsador y su entrada estarán a un ‘1’ lógico enviado por el microcontrolador. Si se
+selecciona la primera entrada se activará un contador descendente el cuál será mostrado a
+través de dos contadores BCD a sus correspondientes displays 7 segmentos, indicando también
+que estos displays están encendidos mediante un led verde, que, cuando llegue a su número
+máximo se resetee y arranque nuevamente.
+Si por el contrario, se selecciona la segunda entrada se deberá habilitar un contador conectado a
+otros dos BCD con sus respectivos displays, donde se hará una cuenta ascendente desde el
+número “99” y, también, se encenderá un led rojo y se reiniciará. Cómo último en el pin 12 del
+puerto D habrá un pulsador que reiniciará a los dos pulsadores, poniéndolos a los dos en “00”,
+para luego esperar a que se elija en el demultiplexor.
+Para realizar llevar a cabo este código deberán crear una librería que contenga las siguientes
+funciones
+• Función del demultiplexor, que contendrá la inicialización, funcionalidad.
+• Una función para cada contador (ascendente y descendente) con su inicialización
+correspondiente.
+• Una función para el control de leds (estilo DigitalWrite)
+Por último, recuerden que se deberá volcar lo necesario para que funcione dentro de un código
+fuente y que, salvo lo que se especifique anteriormente, todo sucede dentro del puerto C.
+
+*/
+
 #include "MKL25Z4.h"
 #include "act3.h"
 int i, j, led_r=20, led_v = 21;
