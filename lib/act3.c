@@ -44,6 +44,7 @@ int bcd7[7][10]={
     { 1, 1, 1, 1, 1, 1, 1},//8
     { 1, 1, 1, 1, 0, 1, 1}//9
 };
+// está bien
 void InitDeMux(){
     SIM->SCGC5_PORTC_MCSK;
     PORTC-> PCR[2]|=(1<<8);
@@ -54,9 +55,10 @@ void InitDeMux(){
     PTC-> PSOR&=~(1u<<3);
 
 }
-void DeMux(){
+//está mal. Entrada y Select deberían ser variables de la funcion DeMux como lo cambié recien.
+void DeMux(int entrada, int select){
     if((entrada==1)&&(select==0b01)){
-        
+        //Dec y Uni no vale nada, deberías poner que número querés ahi.
         ContAscendente(Dec, Uni);
     }else if ((entrada==1)&&(select==0b10)){
         ContDescendente(Dec, Uni);
@@ -73,6 +75,7 @@ void InitContAscendente(){
         PTC-> PSOR&=~(1u<<display1[i]);
     }
 }
+/*ESTÁ MAL, REESCRIBO Y COMENTO LO QUE HICISTE
 void ContAscendente(int Dec, int Uni){
     for (i=0; i<7;i++){
         for (j=0; j<10;j++){
@@ -101,7 +104,26 @@ void ContAscendente(int Dec, int Uni){
             }
         }
     }
-}
+}*/
+// CORRECCIÓN DE LA FUNCIÓN
+void ContAscendente(){
+    
+        //UNIDADES
+        for(i=0;i<10;i++){
+            for(j=0;j<7;j++){
+                if(bcd7[i][j]) PTC->PSOR|=(1<<display2[j]);//supongo que el display 2 es de unidades
+                else PTC->PCOR|=(1<<display2[i]);
+            }
+            //DECENAS
+            if(i==9){
+                int dec=0;
+                dec++;
+                for(k=0;k<7;k++){
+                if(bcd7[dec++][k]) PTC->PSOR|=(1<<display2[k]);//supongo que el display 2 es de unidades
+                else PTC->PCOR|=(1<<display2[k]);
+                if(dec=9) dec=0;
+            }
+    }
 void InitContDescendente(){
     for(i=0; i<7; i++){
         PORTC-> PCR[display2[i]]|=(1<<8);
@@ -109,6 +131,7 @@ void InitContDescendente(){
         PTC-> PSOR&=~(1u<<display2[i]);
     }
 }
+//LO MISMO QUE CON EL ASCENDENTE PERO DE 9 A 0
 void ContDescendente(int Dec, int Uni){
     for (i=7; i>0;i--){
         for (j=10; j>0;j--){
@@ -146,7 +169,8 @@ void InitLeds(){
     PTC-> PDDR|=(1u<<21);
     PTC-> PSOR&=~(1u<<21);
 }
-void leds(){
+//COMO UN DIGITALWRITE; NO SE TENDRIAN QUE USAR LAS FUNCIONES DEL CONTADOR
+/* void leds(){
     if(ContAscendente(9, 9)){
         PTA->PTOR(1u<<21);
     }else if(ContDescendente(9, 9)){
@@ -163,4 +187,7 @@ void leds(){
             }
         }
     }
-}
+}*/
+leds(int pin, int est){
+    if(est) PTC->PSOR|=(1<<pin);
+    else PTC->PCOR|=(1<<pin);
